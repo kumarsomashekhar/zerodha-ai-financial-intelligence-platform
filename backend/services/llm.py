@@ -48,7 +48,7 @@ def _parse_json(text: str) -> dict:
 def _gemini(ctx: dict) -> dict:
     import httpx  # installed with requirements.txt
 
-    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    model = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     body = {
         "systemInstruction": {"parts": [{"text": SYSTEM_PROMPT}]},
