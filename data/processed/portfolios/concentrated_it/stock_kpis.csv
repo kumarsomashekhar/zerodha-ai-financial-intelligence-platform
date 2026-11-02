@@ -1,0 +1,6 @@
+symbol,sector,quantity,last_close,value,weight_pct,return_1y_pct,vs_purchase_price_pct
+INFY,IT,200,1136.5,227300.0,41.5,-24.8,-18.8
+TCS,IT,80,2478.0,198240.0,36.2,-19.0,-34.8
+WIPRO,IT,400,189.5,75812.0,13.8,-21.8,-24.2
+HDFCBANK,Financials,30,684.1,20523.0,3.7,-32.1,-55.9
+ITC,FMCG,100,264.9,26485.0,4.8,-37.2,-38.4

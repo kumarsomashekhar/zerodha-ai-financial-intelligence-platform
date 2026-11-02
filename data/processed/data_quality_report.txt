@@ -1,0 +1,30 @@
+DATA QUALITY REPORT
+============================================================
+
+1. PORTFOLIO HOLDINGS
+Holdings: 5   Missing values: 0
+
+2. STOCK PRICES
+Date range: 2025-10-29 to 2026-10-29
+  INFY      rows:  248   missing Close: 0
+  TCS       rows:  248   missing Close: 0
+  WIPRO     rows:  248   missing Close: 0
+  HDFCBANK  rows:  248   missing Close: 0
+  ITC       rows:  248   missing Close: 0
+
+3. BENCHMARK (^NSEI)
+Rows: 247   Date range: 2025-10-29 to 2026-10-29
+Dates shared with stock prices: 247 of 247
+
+4. FINANCIAL NEWS
+Total articles: 40   Date range: 2026-09-29 to 2026-10-28
+  INFY      articles:  10   articles mentioning the company: 10 of 10
+  TCS       articles:   9   articles mentioning the company: 9 of 9
+  WIPRO     articles:   9   articles mentioning the company: 9 of 9
+  HDFCBANK  articles:  10   articles mentioning the company: 10 of 10
+  ITC       articles:   2   articles mentioning the company: 2 of 2
+
+5. THINGS TO REVIEW
+  - ITC: only 2 news articles (low count)
+
+Note: a news publication date is not the moment a stock first reacted to it.

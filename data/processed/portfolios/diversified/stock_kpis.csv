@@ -1,0 +1,9 @@
+symbol,sector,quantity,last_close,value,weight_pct,return_1y_pct,vs_purchase_price_pct
+RELIANCE,Energy,75,1173.0,87975.0,13.2,-22.0,-6.2
+HDFCBANK,Financials,60,684.1,41046.0,6.2,-32.1,-55.9
+INFY,IT,65,1136.5,73872.5,11.1,-24.8,-24.2
+ITC,FMCG,220,264.9,58267.0,8.8,-37.2,-38.4
+LT,Industrials,28,3821.4,106999.2,16.1,-3.5,12.4
+SUNPHARMA,Healthcare,55,1762.6,96943.0,14.6,2.7,3.7
+MARUTI,Auto,8,11515.0,92120.0,13.8,-28.6,-4.0
+BHARTIARTL,Telecom,55,1965.3,108091.5,16.2,-6.4,22.8

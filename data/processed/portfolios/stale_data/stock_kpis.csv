@@ -1,0 +1,6 @@
+symbol,sector,quantity,last_close,value,weight_pct,return_1y_pct,vs_purchase_price_pct
+RELIANCE,Energy,50,1173.0,58650.0,20.7,-22.0,-6.2
+HDFCBANK,Financials,60,684.1,41046.0,14.5,-32.1,-55.9
+INFY,IT,65,1136.5,73872.5,26.0,-24.8,-24.2
+ITC,FMCG,150,264.9,39727.5,14.0,-37.2,-38.4
+SUNPHARMA,Healthcare,40,1762.6,70504.0,24.8,2.7,3.7

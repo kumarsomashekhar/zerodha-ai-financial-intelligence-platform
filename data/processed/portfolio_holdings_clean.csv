@@ -1,0 +1,6 @@
+portfolio_id,symbol,sector,quantity,assumed_purchase_price,yahoo_symbol
+concentrated_it,INFY,IT,200,1400,INFY.NS
+concentrated_it,TCS,IT,80,3800,TCS.NS
+concentrated_it,WIPRO,IT,400,250,WIPRO.NS
+concentrated_it,HDFCBANK,Financials,30,1550,HDFCBANK.NS
+concentrated_it,ITC,FMCG,100,430,ITC.NS
