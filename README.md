@@ -52,6 +52,8 @@ data/
   app.db                      generated SQLite database (not committed)
 frontend-files/               Next.js source: app/, components/, lib/
 tests/
+docs/                         architecture, API, MCP tooling and demo script
+deployment/                   environment settings, Render and Vercel notes
 ```
 
 ## Setup
@@ -175,6 +177,22 @@ One-year what-if returns, assuming the sample quantities were held from 2025-10-
 - **AI checks:** the validator checks numbers and banned phrases. It cannot judge whether a word such as "heavy" is fair, so wording instructions are used alongside it. It also rejects rounded numbers (for example 88 for 88.4), which is safe but strict.
 - **Not built:** an API gateway (login, rate limits), PostgreSQL or Supabase storage, drift and scenario analysis, and corporate-action handling.
 - **Local only:** the app has no authentication and is not ready to be exposed on the internet. The Zerodha access token lives in memory, so you must log in again after each backend restart.
+
+## Online demo
+
+A free online copy of the project runs in **demo mode**.
+
+| Part | Address |
+|---|---|
+| Website (Vercel) | zerodha-frontend-seven-kappa.vercel.app |
+| Backend (Render) | https://zerodha-ai-backend-x2yd.onrender.com |
+| Backend routes, with "Try it out" buttons | https://zerodha-ai-backend-x2yd.onrender.com/docs |
+
+- **Demo mode** hides the `LIVE` portfolio and refuses every Zerodha route, so no real account can be reached from the internet.
+- **The first visit after a quiet spell takes about a minute**, because the free backend sleeps after 15 minutes without visitors.
+- **The database resets** whenever the backend restarts or sleeps, so the operations dashboard and compliance panel start empty and refill as the site is used.
+- The website and the backend are two separate GitHub repositories (`zerodha-frontend` and this one).
+- Settings, deployment steps and the problems met are in `deployment/`. The walk-through of every feature is in `docs/demo_script.md`.
 
 ## Tests
 
