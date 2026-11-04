@@ -24,7 +24,7 @@ If the folder you clone into has an `&` in its path, quote paths in PowerShell, 
 
 ## 2. Backend setup
 
-From inside the backend folder:
+Go into the backend folder you cloned (`cd zerodha-ai-financial-intelligence-platform`), then run:
 
 ```
 python -m venv .venv
@@ -71,13 +71,13 @@ GEMINI_MODEL=gemini-3.5-flash-lite
 
 ## 5. Website setup
 
-From inside the website folder:
+Go into the website folder you cloned (`cd zerodha-frontend`, and check the terminal line now ends with `zerodha-frontend`), then run:
 
 ```
 npm install
 ```
 
-Create a file named `.env.local` in that folder containing one line:
+Create a file named `.env.local` **inside the `zerodha-frontend` folder**, next to `package.json`. On Windows you can create it with `Set-Content .env.local "NEXT_PUBLIC_API_URL=http://localhost:8000"`. If you run that command one folder too high, the website will not find the setting. The file should contain this one line:
 
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000
