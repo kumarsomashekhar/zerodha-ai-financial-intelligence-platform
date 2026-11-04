@@ -178,6 +178,24 @@ One-year what-if returns, assuming the sample quantities were held from 2025-10-
 - **Not built:** an API gateway (login, rate limits), PostgreSQL or Supabase storage, drift and scenario analysis, and corporate-action handling.
 - **Local only:** the app has no authentication and is not ready to be exposed on the internet. The Zerodha access token lives in memory, so you must log in again after each backend restart.
 
+## Screenshots
+
+**Insight card** (an AI-written summary of a portfolio, with a feedback button)
+
+![Insight card](docs/screenshots/01-insight-card.png)
+
+**Benchmark analysis** (return, volatility and drawdown against the Nifty 50, explained by the AI and checked against the data)
+
+![Benchmark analysis](docs/screenshots/02-benchmark-analysis.png)
+
+**Operations dashboard** (job health, output quality and open exceptions)
+
+![Operations dashboard](docs/screenshots/03-operations-dashboard.png)
+
+**Compliance panel** (disclosures, policy flags, reviewer decisions and the audit trail)
+
+![Compliance panel](docs/screenshots/04-compliance-panel.png)
+
 ## Online demo
 
 A free online copy of the project runs in **demo mode**.
