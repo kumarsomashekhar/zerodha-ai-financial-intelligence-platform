@@ -184,7 +184,7 @@ A free online copy of the project runs in **demo mode**.
 
 | Part | Address |
 |---|---|
-| Website (Vercel) | zerodha-frontend-seven-kappa.vercel.app |
+| Website (Vercel) | https://zerodha-frontend-seven-kappa.vercel.app |
 | Backend (Render) | https://zerodha-ai-backend-x2yd.onrender.com |
 | Backend routes, with "Try it out" buttons | https://zerodha-ai-backend-x2yd.onrender.com/docs |
 
