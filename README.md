@@ -58,6 +58,8 @@ deployment/                   environment settings, Render and Vercel notes
 
 ## Setup
 
+Teammates: see [docs/team_setup.md](docs/team_setup.md) for a step-by-step guide, including running `LIVE` with your own Zerodha account. The complete website project is in the separate `zerodha-frontend` repository.
+
 You need Python 3.10 or newer and Node.js.
 
 **1. Backend**
