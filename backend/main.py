@@ -1,5 +1,6 @@
 """FastAPI app. Run from the project root:  uvicorn backend.main:app --reload"""
 import os
+import hmac
 import time
 import uuid
 from collections import defaultdict, deque
@@ -8,7 +9,7 @@ from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -351,8 +352,21 @@ def compliance_summary():
     return compliance_service.summary()
 
 
+REVIEW_KEY = os.getenv("REVIEW_KEY", "")
+
+
+def _check_review_key(supplied: str) -> None:
+    """Only people holding the reviewer key may record compliance decisions on a public server."""
+    if REVIEW_KEY:
+        if not hmac.compare_digest(supplied.encode(), REVIEW_KEY.encode()):
+            raise HTTPException(403, "A valid reviewer access key is required")
+    elif DEMO_MODE:
+        raise HTTPException(403, "Reviews are disabled on this server (no reviewer key is configured)")
+
+
 @app.post("/api/compliance/review")
-def compliance_review(req: ReviewRequest):
+def compliance_review(req: ReviewRequest, x_review_key: str = Header(default="")):
+    _check_review_key(x_review_key)
     if req.decision not in ("approved", "needs_follow_up"):
         raise HTTPException(422, "decision must be 'approved' or 'needs_follow_up'")
     if not storage.job_exists(req.job_id):

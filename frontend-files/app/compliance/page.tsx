@@ -47,7 +47,17 @@ function reviewLabel(r: Review) {
   return r.decision === "approved" ? "approved" : "needs follow-up";
 }
 
-function FlagCard({ flag, reviewer, onSaved }: { flag: Flag; reviewer: string; onSaved: () => void }) {
+function FlagCard({
+  flag,
+  reviewer,
+  reviewKey,
+  onSaved,
+}: {
+  flag: Flag;
+  reviewer: string;
+  reviewKey: string;
+  onSaved: () => void;
+}) {
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
@@ -58,10 +68,13 @@ function FlagCard({ flag, reviewer, onSaved }: { flag: Flag; reviewer: string; o
     try {
       const r = await fetch(`${API}/api/compliance/review`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-review-key": reviewKey },
         body: JSON.stringify({ job_id: flag.job_id, decision, note, reviewer }),
       });
-      if (!r.ok) throw new Error("The review could not be saved");
+      if (!r.ok) {
+        const body = await r.json().catch(() => ({}));
+        throw new Error(typeof body.detail === "string" ? body.detail : "The review could not be saved");
+      }
       setNote("");
       onSaved();
     } catch (e) {
@@ -124,6 +137,7 @@ export default function Compliance() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [reviewer, setReviewer] = useState("reviewer");
+  const [reviewKey, setReviewKey] = useState("");
 
   async function load() {
     setLoading(true);
@@ -197,13 +211,23 @@ export default function Compliance() {
                   onChange={(e) => setReviewer(e.target.value)}
                 />
               </label>
+              <label className="text-sm">
+                Reviewer key:{" "}
+                <input
+                  type="password"
+                  className="rounded border px-2 py-1"
+                  value={reviewKey}
+                  maxLength={100}
+                  onChange={(e) => setReviewKey(e.target.value)}
+                />
+              </label>
             </div>
             {data.flags.length === 0 ? (
               <p className="text-sm text-gray-500">No flagged analyses.</p>
             ) : (
               <ul className="space-y-3">
                 {data.flags.map((f) => (
-                  <FlagCard key={f.job_id} flag={f} reviewer={reviewer} onSaved={load} />
+                  <FlagCard key={f.job_id} flag={f} reviewer={reviewer} reviewKey={reviewKey} onSaved={load} />
                 ))}
               </ul>
             )}

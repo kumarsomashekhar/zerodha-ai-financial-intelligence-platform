@@ -2,7 +2,7 @@
 
 Base address when running locally: `http://localhost:8000`. The backend also serves an interactive version of this page at `/docs` (every route with a "Try it out" button) and a machine-readable description at `/openapi.json`.
 
-There is no authentication, and the API is meant for local use only. Cross-origin access is limited to the addresses in the `ALLOWED_ORIGINS` setting, which defaults to `http://localhost:3000`.
+There is no login system. Recording a compliance review needs a reviewer key, and everything else is open, so the API suits sample data and local use only.. Cross-origin access is limited to the addresses in the `ALLOWED_ORIGINS` setting, which defaults to `http://localhost:3000`.
 
 Error responses have the form `{"detail": "message"}`.
 
@@ -113,4 +113,7 @@ The access token is kept in memory only. The free Kite "Personal" plan returns h
 |---|---|
 | `GET /api/quality` | The latest data-quality run: `run_at`, `runs_saved`, `metrics`, `flags` and the full `report_text`. `404` if none has been saved |
 | `GET /api/ops/summary` | `job_health` (counts by status, average time per stage), `adoption`, `output_quality` (AI provider mix, validation pass rate, helpful rate), open `exceptions`, `recent_jobs` and the `latest_quality_run` |
-| `GET
+| `GET /api/compliance/summary` | `disclosures`, `counts`, policy `flags` (failed jobs and rejected AI answers, each with its review status), `data_flags` and the `audit_trail` |
+| `POST /api/compliance/review` | Record a reviewer decision. Body: `{"job_id": "...", "decision": "approved", "note": "...", "reviewer": "name"}`. Header `x-review-key` must hold the reviewer key. `decision` must be `approved` or `needs_follow_up` (otherwise `422`). Returns `{"saved": true}`, or `404` for an unknown job |
+
+Every review is kept, and the newest one for a job is its current status. Recording a review also needs the reviewer key in the `x-review-key` request header. A missing or wrong key returns `403`, and so does any review on a server running in demo mode with no key configured. A job named `selftest` (used in development) is ignored by the operations and compliance summaries.

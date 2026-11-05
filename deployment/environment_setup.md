@@ -17,6 +17,7 @@ Create the file by hand. It is listed in `.gitignore`. Changes to `.env` are rea
 | `DEMO_MODE` | Hide `LIVE` and refuse every `/api/kite` route | `false` locally, `true` on any public server |
 | `ALLOWED_ORIGINS` | Website addresses allowed to call the backend | Comma separated, no trailing slash. Default `http://localhost:3000` |
 | `RATE_LIMIT_PER_MINUTE` | Analysis and AI requests per visitor per minute | Default `20`. `0` switches the limit off |
+| `REVIEW_KEY` | Key required to record compliance reviews | Anyone holding it can approve flags, so share it only with reviewers. On a public server with no key set, reviews are refused |
 
 ## Hosted backend (Render)
 
@@ -29,6 +30,7 @@ Entered on the service's **Environment** page. `backend/.env` is not uploaded.
 | `GEMINI_API_KEY` | Your Gemini key |
 | `GEMINI_MODEL` | `gemini-3.5-flash-lite` |
 | `ALLOWED_ORIGINS` | The website address, for example `https://your-site.vercel.app`, with **no `/` at the end** |
+| `REVIEW_KEY` | The same reviewer key as in your local `.env` |
 
 Do **not** add the Kite or GNews keys to a public server. Demo mode does not need them, and leaving them out means the real Zerodha account cannot be reached from the internet.
 
