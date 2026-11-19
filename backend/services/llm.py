@@ -118,6 +118,15 @@ def _numbers_ok(result: dict, bench: dict) -> bool:
     used = {round(float(x), 1) for x in re.findall(r"\d+(?:\.\d+)?", text)}
     return used.issubset(_allowed_numbers(bench))
 
+def _wording_ok(result: dict) -> bool:
+    """True only if the answer contains no advice or prediction wording (same list as validation.py)."""
+    from backend.services.validation import BANNED
+
+    text = " ".join(
+        [str(result.get("summary", "")), str(result.get("risk_note", ""))]
+        + [str(d) for d in result.get("key_drivers", [])]
+    )
+    return not BANNED.search(text)
 
 def benchmark_template(bench: dict) -> dict:
     k = bench["kpis"]
@@ -173,9 +182,9 @@ def explain_benchmark(bench: dict, headlines: list | None = None) -> tuple[dict,
         elif provider == "anthropic":
             result = _anthropic(ctx)
         if result is not None:
-            if _numbers_ok(result, bench):
+            if _numbers_ok(result, bench) and _wording_ok(result):
                 return result, provider
-            print("[LLM] benchmark answer used a number we do not have, using template instead")
+            print("[LLM] benchmark answer failed the number or wording check, using template instead")
     except Exception as e:
         print(f"[LLM] {provider} benchmark call failed, using template instead -> {type(e).__name__}: {e}")
     return benchmark_template(bench), "template"

@@ -12,3 +12,4 @@ yfinance
 mcp[cli]<2
 requests
 matplotlib
+jsonschema

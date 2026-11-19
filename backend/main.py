@@ -158,7 +158,16 @@ def create_analysis(req: AnalysisRequest):
         _stage(job, "validation", t)
 
         t = time.time()
-        cards = recommendation.build_cards(metrics, alerts, explanation)
+        cards = recommendation.build_cards(
+            metrics, alerts, explanation,
+            source={
+                "portfolio_id": req.portfolio_id,
+                "snapshot": f"/api/snapshot/{job_id}",
+                "price_source": "Zerodha Kite holdings" if req.portfolio_id == "LIVE"
+                else "sample portfolio file (fixed prices)",
+                "explanation_by": provider,
+            },
+        )
         _stage(job, "recommendation", t)
 
         job.update(status="completed", metrics=metrics, alerts=alerts, cards=cards,

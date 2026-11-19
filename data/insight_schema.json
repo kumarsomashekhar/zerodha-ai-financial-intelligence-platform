@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "insight_schema.json",
+  "title": "Insight job",
+  "description": "Shape of an analysis job returned by POST /api/portfolio-analysis and GET /api/insights/{job_id}. The audit trail is stored separately (see $defs/audit). The request fields timeframe and insight_type are accepted and recorded but do not yet change the analysis.",
+  "type": "object",
+  "required": ["job_id", "status", "created_at", "request", "stages"],
+  "properties": {
+    "job_id": {"type": "string"},
+    "status": {"enum": ["running", "completed", "failed"]},
+    "created_at": {"type": "string"},
+    "request": {"$ref": "#/$defs/request"},
+    "stages": {"type": "array", "items": {"$ref": "#/$defs/stage"}},
+    "error": {"type": "string", "description": "Present only when status is failed"},
+    "metrics": {"$ref": "#/$defs/metrics"},
+    "alerts": {"type": "array", "items": {"$ref": "#/$defs/alert"}},
+    "cards": {"type": "array", "items": {"$ref": "#/$defs/card"}}
+  },
+  "$defs": {
+    "request": {
+      "type": "object",
+      "required": ["portfolio_id"],
+      "properties": {
+        "portfolio_id": {"type": "string"},
+        "timeframe": {"type": "string", "default": "1M"},
+        "insight_type": {"type": "string", "default": "summary"}
+      }
+    },
+    "stage": {
+      "type": "object",
+      "required": ["stage", "ms"],
+      "properties": {
+        "stage": {"enum": ["data_load", "analytics", "llm_analysis", "validation", "recommendation"]},
+        "ms": {"type": "number", "minimum": 0}
+      }
+    },
+    "holding": {
+      "type": "object",
+      "required": ["symbol", "sector", "weight_pct", "pnl_pct", "contribution_pct"],
+      "properties": {
+        "symbol": {"type": "string"},
+        "sector": {"type": "string"},
+        "weight_pct": {"type": "number"},
+        "pnl_pct": {"type": "number"},
+        "contribution_pct": {"type": "number", "description": "Profit or loss of this holding as a percentage of the total amount invested"}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "holdings_count", "total_value", "total_invested", "total_pnl_pct", "top_holding",
+        "sector_pct", "hhi", "weighted_volatility_pct", "data_age_days", "holdings"
+      ],
+      "properties": {
+        "holdings_count": {"type": "integer", "minimum": 1},
+        "total_value": {"type": "number"},
+        "total_invested": {"type": "number"},
+        "total_pnl_pct": {"type": "number"},
+        "top_holding": {
+          "type": "object",
+          "required": ["symbol", "weight_pct"],
+          "properties": {"symbol": {"type": "string"}, "weight_pct": {"type": "number"}}
+        },
+        "sector_pct": {"type": "object", "additionalProperties": {"type": "number"}},
+        "hhi": {"type": "number", "description": "Concentration index: 1 divided by N for equal weights, 1.0 for a single stock"},
+        "weighted_volatility_pct": {"type": ["number", "null"], "description": "Null when the portfolio file has no volatility column"},
+        "data_age_days": {"type": "integer", "minimum": 0},
+        "holdings": {"type": "array", "items": {"$ref": "#/$defs/holding"}}
+      }
+    },
+    "alert": {
+      "type": "object",
+      "required": ["type", "severity", "metric", "value", "threshold"],
+      "properties": {
+        "type": {"enum": ["sector_concentration", "single_stock_concentration", "low_diversification", "high_volatility", "stale_data"]},
+        "severity": {"enum": ["high", "medium"]},
+        "metric": {"type": "string"},
+        "value": {"type": "number"},
+        "threshold": {"type": "number"}
+      }
+    },
+    "explanation": {
+      "type": "object",
+      "required": ["summary", "key_drivers", "risk_note"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "key_drivers": {"type": "array", "items": {"type": "string"}},
+        "risk_note": {"type": "string", "minLength": 1}
+      }
+    },
+    "card": {
+      "type": "object",
+      "required": [
+        "id", "category", "title", "rationale", "details", "metrics", "freshness",
+        "confidence", "confidence_score", "source", "disclaimer", "policy_check"
+      ],
+      "properties": {
+        "id": {"type": "string"},
+        "category": {"enum": ["educational_insight", "risk_alert", "review_prompt"]},
+        "title": {"type": "string"},
+        "rationale": {"type": "string", "minLength": 1},
+        "details": {"type": "array", "items": {"type": "string"}},
+        "metrics": {"type": "object"},
+        "freshness": {
+          "type": "object",
+          "required": ["age_days", "stale"],
+          "properties": {"age_days": {"type": "integer", "minimum": 0}, "stale": {"type": "boolean"}}
+        },
+        "confidence": {"enum": ["low", "medium", "high"]},
+        "confidence_score": {"type": "number", "minimum": 0, "maximum": 1, "description": "Rule-based, not statistically calibrated: it mirrors the confidence level"},
+        "source": {
+          "type": "object",
+          "properties": {
+            "portfolio_id": {"type": "string"},
+            "snapshot": {"type": "string", "description": "Address of the stored holdings snapshot"},
+            "price_source": {"type": "string"},
+            "explanation_by": {"type": "string"}
+          }
+        },
+        "disclaimer": {"type": "string", "minLength": 1},
+        "policy_check": {"enum": ["passed", "replaced"], "description": "replaced means advice or prediction wording was found and removed"}
+      }
+    },
+    "audit": {
+      "description": "Stored separately from the job and returned by GET /api/audit/{job_id}",
+      "type": "object",
+      "required": ["provider", "prompt_version", "validation_status", "validation_issues"],
+      "properties": {
+        "provider": {"enum": ["gemini", "anthropic", "template", "template_fallback"]},
+        "prompt_version": {"type": "string"},
+        "validation_status": {"enum": ["passed", "fallback_used"]},
+        "validation_issues": {"type": "array", "items": {"type": "string"}},
+        "data_snapshot": {"type": "object", "description": "The metrics and alerts the AI was given"}
+      }
+    }
+  }
+}

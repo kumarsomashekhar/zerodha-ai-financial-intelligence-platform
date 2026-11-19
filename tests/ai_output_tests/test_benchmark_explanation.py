@@ -40,3 +40,18 @@ def test_template_says_behind_when_the_portfolio_trails():
 def test_template_says_ahead_when_the_portfolio_leads():
     bench = {**BENCH, "kpis": {**BENCH["kpis"], "Return versus Nifty 50 (percentage points)": 3.0}}
     assert "ahead of" in llm.benchmark_template(bench)["summary"]
+
+def test_advice_wording_is_caught():
+    advice = {"summary": "You should buy more shares.", "key_drivers": [], "risk_note": ""}
+    assert not llm._wording_ok(advice)
+
+
+def test_prediction_wording_is_caught_in_key_drivers():
+    prediction = {"summary": "Fine.", "key_drivers": ["The price will rise soon."], "risk_note": ""}
+    assert not llm._wording_ok(prediction)
+
+
+def test_plain_wording_passes():
+    plain = {"summary": "The portfolio fell.", "key_drivers": ["IT dominates."], "risk_note": "Educational only."}
+    assert llm._wording_ok(plain)
+
